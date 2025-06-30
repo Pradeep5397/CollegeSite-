@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 
 function Home() {
@@ -314,12 +315,12 @@ function Home() {
           <div className="quick-links">
             <h3>Quick Links</h3>
             <ul>
-              <li><a href="#admissions">Admissions</a></li>
-              <li><a href="#calendar">Academic Calendar</a></li>
-              <li><a href="#research">Research Centers</a></li>
-              <li><a href="#campus">Campus Life</a></li>
-              <li><a href="#placements">Placements</a></li>
-              <li><a href="#alumni">Alumni</a></li>
+              <li><Link to="/admissions">Admissions</Link></li>
+              <li><Link to="/calendar">Academic Calendar</Link></li>
+              <li><Link to="/research">Research Centers</Link></li>
+              <li><Link to="/campus">Campus Life</Link></li>
+              <li><Link to="/placements">Placements</Link></li>
+              <li><Link to="/alumni">Alumni</Link></li>
             </ul>
           </div>
         </div>
