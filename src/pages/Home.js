@@ -10,6 +10,7 @@ function Home() {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showPlacementsModal, setShowPlacementsModal] = useState(false);
 
   const [selectedCourse, setSelectedCourse] = useState(null);
 
@@ -100,6 +101,39 @@ function Home() {
     },
   };
 
+  const companies = [
+    {
+      name: "Microsoft",
+      package: "₹25-45 LPA",
+      positions: "Software Engineer, Data Scientist"
+    },
+    {
+      name: "Google",
+      package: "₹30-50 LPA",
+      positions: "Software Developer, Product Manager"
+    },
+    {
+      name: "Amazon",
+      package: "₹20-40 LPA",
+      positions: "SDE, Cloud Engineer"
+    },
+    {
+      name: "TCS",
+      package: "₹3.5-7 LPA",
+      positions: "System Engineer, Digital Specialist"
+    },
+    {
+      name: "Infosys",
+      package: "₹3.5-8 LPA",
+      positions: "Systems Engineer, Technical Analyst"
+    },
+    {
+      name: "Wipro",
+      package: "₹3.5-7.5 LPA",
+      positions: "Project Engineer, Technical Lead"
+    }
+  ];
+
   const handleFormChange = (e) => {
     setContactForm({
       ...contactForm,
@@ -110,15 +144,12 @@ function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(contactForm);
-    // Show success message
     setShowSuccess(true);
-    // Clear form
     setContactForm({
       name: '',
       email: '',
       message: ''
     });
-    // Hide success message after 3 seconds
     setTimeout(() => {
       setShowSuccess(false);
     }, 3000);
@@ -135,6 +166,11 @@ function Home() {
 
   const closeCourseModal = () => {
     setSelectedCourse(null);
+  };
+
+  const togglePlacementsModal = (e) => {
+    e.preventDefault();
+    setShowPlacementsModal(!showPlacementsModal);
   };
 
   return (
@@ -319,7 +355,7 @@ function Home() {
               <li><Link to="/calendar">Academic Calendar</Link></li>
               <li><Link to="/research">Research Centers</Link></li>
               <li><Link to="/campus">Campus Life</Link></li>
-              <li><Link to="/placements">Placements</Link></li>
+              <li><a href="#" onClick={togglePlacementsModal}>Placements</a></li>
               <li><Link to="/alumni">Alumni</Link></li>
             </ul>
           </div>
@@ -328,6 +364,25 @@ function Home() {
           <p>© {new Date().getFullYear()} Engineering College. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Placements Modal */}
+      {showPlacementsModal && (
+        <div className="modal-overlay" onClick={togglePlacementsModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={togglePlacementsModal}>×</button>
+            <h2>Our Placement Partners</h2>
+            <div className="companies-list">
+              {companies.map((company, index) => (
+                <div key={index} className="company-item">
+                  <h3>{company.name}</h3>
+                  <p><strong>Package:</strong> {company.package}</p>
+                  <p><strong>Positions:</strong> {company.positions}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

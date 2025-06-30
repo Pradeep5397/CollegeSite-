@@ -418,4 +418,32 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Companies List Styles */
+.companies-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 15px;
+}
+
+.company-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.company-item h3 {
+  color: #1976d2;
+  margin-bottom: 10px;
+}
+
+.company-item p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.company-item strong {
+  color: #333;
 } 
