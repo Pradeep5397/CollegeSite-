@@ -8,6 +8,97 @@ function Home() {
     message: ''
   });
 
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const [selectedCourse, setSelectedCourse] = useState(null);
+
+  const courseDetails = {
+    'Computer Science & Engineering': {
+      duration: '4 Years',
+      degree: 'B.Tech',
+      intake: '120 seats',
+      description: `Our Computer Science & Engineering program offers a comprehensive curriculum that covers:
+      • Advanced Programming Languages (Java, Python, C++)
+      • Data Structures and Algorithms
+      • Artificial Intelligence and Machine Learning
+      • Cloud Computing and Big Data
+      • Web and Mobile Development
+      • Cybersecurity
+      
+      Career Opportunities:
+      • Software Developer
+      • Data Scientist
+      • AI/ML Engineer
+      • Cloud Architect
+      • Security Analyst
+      
+      The program includes hands-on projects, internships, and industry collaborations with leading tech companies.`,
+    },
+    'Mechanical Engineering': {
+      duration: '4 Years',
+      degree: 'B.Tech',
+      intake: '60 seats',
+      description: `Our Mechanical Engineering program focuses on:
+      • CAD/CAM Technologies
+      • Thermodynamics and Heat Transfer
+      • Manufacturing Processes
+      • Robotics and Automation
+      • Industrial Design
+      • Automotive Engineering
+      
+      Career Opportunities:
+      • Design Engineer
+      • Production Manager
+      • Robotics Engineer
+      • R&D Specialist
+      • Project Manager
+      
+      Students get practical experience through our state-of-the-art workshops and industry partnerships.`,
+    },
+    'Electronics Engineering': {
+      duration: '4 Years',
+      degree: 'B.Tech',
+      intake: '60 seats',
+      description: `Our Electronics Engineering program covers:
+      • Digital Electronics
+      • VLSI Design
+      • Embedded Systems
+      • Communication Systems
+      • Signal Processing
+      • IoT and Sensor Networks
+      
+      Career Opportunities:
+      • Electronics Design Engineer
+      • VLSI Designer
+      • Embedded Systems Engineer
+      • IoT Specialist
+      • Communications Engineer
+      
+      The program includes extensive lab work and industry projects with leading electronics companies.`,
+    },
+    'Civil Engineering': {
+      duration: '4 Years',
+      degree: 'B.Tech',
+      intake: '60 seats',
+      description: `Our Civil Engineering program encompasses:
+      • Structural Engineering
+      • Environmental Engineering
+      • Transportation Systems
+      • Geotechnical Engineering
+      • Construction Management
+      • Smart Cities Planning
+      
+      Career Opportunities:
+      • Structural Engineer
+      • Construction Manager
+      • Environmental Consultant
+      • Urban Planner
+      • Project Engineer
+      
+      Students participate in real-world projects and get exposure to modern surveying and design tools.`,
+    },
+  };
+
   const handleFormChange = (e) => {
     setContactForm({
       ...contactForm,
@@ -18,6 +109,31 @@ function Home() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(contactForm);
+    // Show success message
+    setShowSuccess(true);
+    // Clear form
+    setContactForm({
+      name: '',
+      email: '',
+      message: ''
+    });
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000);
+  };
+
+  const scrollToPrograms = () => {
+    const programsSection = document.getElementById('programs');
+    programsSection.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const openCourseModal = (courseName) => {
+    setSelectedCourse(courseName);
+  };
+
+  const closeCourseModal = () => {
+    setSelectedCourse(null);
   };
 
   return (
@@ -27,7 +143,7 @@ function Home() {
         <div className="hero-content">
           <h1>Welcome to Engineering Excellence</h1>
           <p>Shaping Tomorrow's Leaders in Technology and Innovation</p>
-          <button className="explore-btn">Explore Programs</button>
+          <button className="explore-btn" onClick={scrollToPrograms}>Explore Programs</button>
         </div>
       </div>
 
@@ -78,31 +194,42 @@ function Home() {
       </div>
 
       {/* Programs Section */}
-      <div className="programs-section">
+      <div id="programs" className="programs-section">
         <h2>Our Programs</h2>
         <div className="program-list">
-          <div className="program-item">
-            <h3>Computer Science & Engineering</h3>
-            <p>Cutting-edge curriculum in AI, Machine Learning, Cloud Computing, and Software Engineering. 
-               Our program focuses on practical learning with industry-standard tools and technologies.</p>
-          </div>
-          <div className="program-item">
-            <h3>Mechanical Engineering</h3>
-            <p>Advanced programs in Design, Manufacturing, Robotics, and Automation. 
-               Students work with state-of-the-art equipment and software tools.</p>
-          </div>
-          <div className="program-item">
-            <h3>Electronics Engineering</h3>
-            <p>Specializations in VLSI, Embedded Systems, and Communications. 
-               Our labs are equipped with the latest testing and measurement equipment.</p>
-          </div>
-          <div className="program-item">
-            <h3>Civil Engineering</h3>
-            <p>Focus on Structural Engineering, Environmental Systems, and Smart Cities. 
-               The program includes field visits and practical training.</p>
-          </div>
+          {Object.keys(courseDetails).map((courseName) => (
+            <div 
+              key={courseName} 
+              className="program-item" 
+              onClick={() => openCourseModal(courseName)}
+              style={{ cursor: 'pointer' }}
+            >
+              <h3>{courseName}</h3>
+              <p>{courseDetails[courseName].description.split('\n')[0]}</p>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* Course Modal */}
+      {selectedCourse && (
+        <div className="modal-overlay" onClick={closeCourseModal}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeCourseModal}>×</button>
+            <h2>{selectedCourse}</h2>
+            <div className="course-info">
+              <p><strong>Duration:</strong> {courseDetails[selectedCourse].duration}</p>
+              <p><strong>Degree:</strong> {courseDetails[selectedCourse].degree}</p>
+              <p><strong>Annual Intake:</strong> {courseDetails[selectedCourse].intake}</p>
+            </div>
+            <div className="course-description">
+              {courseDetails[selectedCourse].description.split('\n').map((line, index) => (
+                <p key={index}>{line}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Why Choose Us Section */}
       <div className="why-choose-section">
@@ -172,6 +299,11 @@ function Home() {
               ></textarea>
             </div>
             <button type="submit" className="submit-btn">Send Message</button>
+            {showSuccess && (
+              <div className="success-message">
+                Thank you! Your message has been sent successfully.
+              </div>
+            )}
           </form>
         </div>
       </div>
